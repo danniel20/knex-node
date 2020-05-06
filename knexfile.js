@@ -5,9 +5,10 @@ module.exports = {
   development: {
     client: 'pg',
     connection: {
-      database: "knex_teste",
-      user: "postgres",
-      password: "postgres"
+      host : process.env.DB_HOST,
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS
     },
     migrations: {
       tablelName: 'knex_migrations',
@@ -17,5 +18,11 @@ module.exports = {
       directory: `${__dirname}/src/database/seeds`
     }
   },
+  onUpdateTrigger: table => `
+    CREATE TRIGGER ${table}_updated_at
+    BEFORE UPDATE ON ${table}
+    FOR EACH ROW
+    EXECUTE PROCEDURE on_update_timestamp();
+  `
 
 };

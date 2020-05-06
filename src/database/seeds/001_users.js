@@ -1,12 +1,15 @@
+const faker = require('faker')
 
-exports.seed = function(knex) {
-  // Deletes ALL existing entries
-  return knex('users').del()
-    .then(function () {
-      // Inserts seed entries
-      return knex('users').insert([
-        { username: 'joao'},
-        { username: 'maria'}
-      ]);
-    });
-};
+exports.seed = async (knex) => {
+
+  await knex('users').del()
+
+  const usersArray = []
+  
+  for (let i = 0; i < 5; i++) {
+    usersArray.push({ username: faker.name.firstName()})
+  }
+
+  await knex('users').insert(usersArray)
+
+}
